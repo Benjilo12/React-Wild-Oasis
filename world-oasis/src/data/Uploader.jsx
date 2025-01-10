@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { isFuture, isPast, isToday } from "date-fns";
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
+import isTomorrow from "dayjs/plugin/isTomorrow";
 import supabase from "../services/supabase";
 import Button from "../ui/Button";
 import { subtractDates } from "../utils/helpers";
@@ -7,6 +9,10 @@ import { subtractDates } from "../utils/helpers";
 import { bookings } from "./data-bookings";
 import { cabins } from "./data-cabins";
 import { guests } from "./data-guests";
+
+// Extend dayjs with the plugins
+dayjs.extend(isToday);
+dayjs.extend(isTomorrow);
 
 // const originalSettings = {
 //   minBookingLength: 3,
@@ -65,20 +71,20 @@ async function createBookings() {
 
     let status;
     if (
-      isPast(new Date(booking.endDate)) &&
-      !isToday(new Date(booking.endDate))
+      dayjs(booking.endDate).isBefore(dayjs()) &&
+      !dayjs(booking.endDate).isToday()
     )
       status = "checked-out";
     if (
-      isFuture(new Date(booking.startDate)) ||
-      isToday(new Date(booking.startDate))
+      dayjs(booking.startDate).isAfter(dayjs()) ||
+      dayjs(booking.startDate).isToday()
     )
       status = "unconfirmed";
     if (
-      (isFuture(new Date(booking.endDate)) ||
-        isToday(new Date(booking.endDate))) &&
-      isPast(new Date(booking.startDate)) &&
-      !isToday(new Date(booking.startDate))
+      (dayjs(booking.endDate).isAfter(dayjs()) ||
+        dayjs(booking.endDate).isToday()) &&
+      dayjs(booking.startDate).isBefore(dayjs()) &&
+      !dayjs(booking.startDate).isToday()
     )
       status = "checked-in";
 

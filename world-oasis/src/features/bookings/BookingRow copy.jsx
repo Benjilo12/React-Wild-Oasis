@@ -1,16 +1,11 @@
 import styled from "styled-components";
-import dayjs from "dayjs";
-import isToday from "dayjs/plugin/isToday";
-import relativeTime from "dayjs/plugin/relativeTime";
+import { format, isToday } from "date-fns/es";
 
 import Tag from "../../ui/Tag";
 import Table from "../../ui/Table";
-import PropTypes from "prop-types";
 
 import { formatCurrency } from "../../utils/helpers";
-
-dayjs.extend(isToday);
-dayjs.extend(relativeTime);
+import { formatDistanceFromNow } from "../../utils/helpers";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -64,8 +59,8 @@ function BookingRow({
   console.log("endDate:", endDate);
 
   // Ensure the dates are valid Date objects
-  const parsedStartDate = dayjs(startDate);
-  const parsedEndDate = dayjs(endDate);
+  const parsedStartDate = new Date(startDate);
+  const parsedEndDate = new Date(endDate);
 
   return (
     <Table.Row>
@@ -78,14 +73,14 @@ function BookingRow({
 
       <Stacked>
         <span>
-          {parsedStartDate.isToday()
+          {isToday(parsedStartDate)
             ? "Today"
-            : dayjs(parsedStartDate).fromNow()}{" "}
+            : formatDistanceFromNow(parsedStartDate)}{" "}
           &rarr; {numNights} night stay
         </span>
         <span>
-          {parsedStartDate.format("MMM DD YYYY")} &mdash;{" "}
-          {parsedEndDate.format("MMM DD YYYY")}
+          {format(parsedStartDate, "MMM dd yyyy")} &mdash;{" "}
+          {format(parsedEndDate, "MMM dd yyyy")}
         </span>
       </Stacked>
 
@@ -95,26 +90,5 @@ function BookingRow({
     </Table.Row>
   );
 }
-
-BookingRow.propTypes = {
-  booking: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    created_at: PropTypes.string.isRequired,
-    startDate: PropTypes.string.isRequired,
-    endDate: PropTypes.string.isRequired,
-    numNights: PropTypes.number.isRequired,
-    numGuests: PropTypes.number.isRequired,
-    totalPrice: PropTypes.number.isRequired,
-    status: PropTypes.oneOf(["unconfirmed", "checked-in", "checked-out"])
-      .isRequired,
-    guests: PropTypes.shape({
-      fullName: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-    }).isRequired,
-    cabins: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default BookingRow;
