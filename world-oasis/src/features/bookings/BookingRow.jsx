@@ -3,13 +3,13 @@ import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Menus from "../../ui/Menus";
-import {HiEye} from "react-icons/hi2";
+import { HiArrowDownOnSquare, HiEye } from "react-icons/hi2";
 import Tag from "../../ui/Tag";
 import Table from "../../ui/Table";
 import PropTypes from "prop-types";
 
 import { formatCurrency } from "../../utils/helpers";
-import {  useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 dayjs.extend(isToday);
 dayjs.extend(relativeTime);
@@ -55,8 +55,7 @@ function BookingRow({
     cabins: { name: cabinName },
   },
 }) {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const statusToTagName = {
     unconfirmed: "blue",
@@ -96,16 +95,27 @@ function BookingRow({
 
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
-      
-    <Amount>{formatCurrency(totalPrice)}</Amount>
+      <Amount>{formatCurrency(totalPrice)}</Amount>
 
-    <Menus.Menu>
-      <Menus.Toggle id={bookingId}/>
-      <Menus.List id={bookingId}>
-        <Menus.Button icon={<HiEye />}  onClick={() => navigate(`/bookings/${bookingId}`)}>
-        see details</Menus.Button>
-      </Menus.List>
-    </Menus.Menu>
+      <Menus.Menu>
+        <Menus.Toggle id={bookingId} />
+        <Menus.List id={bookingId}>
+          <Menus.Button
+            icon={<HiEye />}
+            onClick={() => navigate(`/bookings/${bookingId}`)}
+          >
+            see details
+          </Menus.Button>
+          {status === "unconfirmed" && (
+            <Menus.Button
+              icon={<HiArrowDownOnSquare />}
+              onClick={() => navigate(`/checkin/${bookingId}`)}
+            >
+              check in
+            </Menus.Button>
+          )}
+        </Menus.List>
+      </Menus.Menu>
     </Table.Row>
   );
 }
