@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { format, isToday } from "date-fns";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import {
   HiOutlineChatBubbleBottomCenterText,
   HiOutlineCheckCircle,
@@ -10,14 +11,16 @@ import {
 import DataItem from "../../ui/DataItem";
 import { Flag } from "../../ui/Flag";
 
-import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import { formatCurrency } from "../../utils/helpers";
+
+// Extend Day.js with relative time plugin
+dayjs.extend(relativeTime);
 
 const StyledBookingDataBox = styled.section`
   /* Box */
   background-color: var(--color-grey-0);
   border: 1px solid var(--color-grey-100);
   border-radius: var(--border-radius-md);
-
   overflow: hidden;
 `;
 
@@ -101,7 +104,6 @@ const Footer = styled.footer`
   text-align: right;
 `;
 
-// A purely presentational component
 function BookingDataBox({ booking }) {
   const {
     created_at,
@@ -130,11 +132,11 @@ function BookingDataBox({ booking }) {
         </div>
 
         <p>
-          {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(startDate))
+          {dayjs(startDate).format("ddd, MMM DD YYYY")} (
+          {dayjs(startDate).isSame(dayjs(), "day")
             ? "Today"
-            : formatDistanceFromNow(startDate)}
-          ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
+            : dayjs(startDate).fromNow()}
+          ) &mdash; {dayjs(endDate).format("ddd, MMM DD YYYY")}
         </p>
       </Header>
 
@@ -178,7 +180,9 @@ function BookingDataBox({ booking }) {
       </Section>
 
       <Footer>
-        <p>Booked {format(new Date(created_at), "EEE, MMM dd yyyy, p")}</p>
+        <p>
+          Booked {dayjs(created_at).format("ddd, MMM DD YYYY, h:mm A")}
+        </p>
       </Footer>
     </StyledBookingDataBox>
   );
