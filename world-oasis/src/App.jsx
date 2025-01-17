@@ -16,6 +16,7 @@ import AppLayout from "./ui/AppLayout";
 
 import Booking from "./pages/Booking";
 import Checkin from "./pages/checkin";
+import ProtectedRoute from "./ui/ProtectedRoute";
 
 //created the queryClinet that set ups the cache behind the seens
 const queryClient = new QueryClient({
@@ -34,7 +35,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route>
-            <Route element={<AppLayout />}>
+            <Route
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="bookings" element={<Bookings />} />
