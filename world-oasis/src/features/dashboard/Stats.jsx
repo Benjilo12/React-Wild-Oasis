@@ -57,8 +57,4 @@ function Stats({ bookings, confirmedStays, numDays, cabinCount }) {
   );
 }
 
-// BookingComponent.propTypes = {
-//   bookings: PropTypes.array.isRequired, // Validate that bookings is an array and is required
-// };
-
 export default Stats;
