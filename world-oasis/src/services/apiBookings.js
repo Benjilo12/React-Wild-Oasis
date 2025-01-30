@@ -77,7 +77,6 @@ export async function getStaysAfterDate(date) {
     .lte("startDate", getToday());
 
   if (error) {
-    console.error(error);
     throw new Error("Bookings could not get loaded");
   }
 

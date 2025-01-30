@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "date-fns": "^4.1.0"
+    "date-fns": "^4.1.0",
+    "react-error-boundary": "^5.0.0"
   }
 }
