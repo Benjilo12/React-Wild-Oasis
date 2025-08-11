@@ -71,13 +71,13 @@ function SalesChart({ bookings, numDays }) {
   const data = allDates.map((date) => {
     return {
       label: dayjs(date).format("MMM DD"),
-      totalSales: bookings
+      totalSales: (bookings || [])
         .filter((booking) =>
           dayjs(date).isSame(dayjs(booking.created_at), "day")
         )
         .reduce((acc, cur) => acc + cur.totalPrice, 0),
 
-      extrasSales: bookings
+      extrasSales: (bookings || [])
         .filter((booking) =>
           dayjs(date).isSame(dayjs(booking.created_at), "day")
         )
