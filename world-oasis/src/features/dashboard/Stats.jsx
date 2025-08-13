@@ -8,7 +8,7 @@ import {
 } from "react-icons/hi2";
 // import PropTypes from "prop-types";
 
-function Stats({ bookings = [], confirmedStays = [], numDays, cabinCount }) {
+function Stats({ bookings = [], confirmedStays, numDays, cabinCount }) {
   //1
   const numBookings = bookings.length;
 
@@ -17,6 +17,7 @@ function Stats({ bookings = [], confirmedStays = [], numDays, cabinCount }) {
 
   //3
   const checkins = confirmedStays.length;
+  console.log(checkins);
 
   //4.
   const occupation =
